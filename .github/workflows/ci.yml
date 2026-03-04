@@ -1,0 +1,63 @@
+# Name of the workflow shown in GitHub Actions UI
+name: CI & Auto Merge
+
+# Trigger workflow when a Pull Request targets main branch
+on:
+  pull_request:
+    branches:
+      - main
+
+# Define permissions required for auto-merge
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-test-and-merge:
+    # Use Ubuntu latest runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm' # Cache node_modules for faster builds
+
+      # 3️⃣ Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4️⃣ Run TypeScript type checking
+      # This ensures no TS errors exist
+      - name: Type check
+        run: npx tsc --noEmit
+
+      # 5️⃣ Run ESLint (if configured)
+      # --if-present prevents failure if lint script doesn't exist
+      - name: Lint
+        run: npm run lint --if-present
+
+      # 6️⃣ Run tests (optional but recommended)
+      # Comment this out if you don't have tests yet
+      - name: Run tests
+        run: npm test --if-present
+
+      # 7️⃣ Build Next.js project
+      # This ensures the production build works
+      - name: Build project
+        run: npm run build
+
+      # 8️⃣ Auto-merge PR if everything above succeeds
+      # Only works for branches inside the same repository (not forks)
+      - name: Auto Merge PR
+        if: success() && github.event.pull_request.head.repo.full_name == github.repository
+        uses: pascalgn/automerge-action@v0.15.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: squash # Options: merge | squash | rebase
