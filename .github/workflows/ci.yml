@@ -1,4 +1,8 @@
-# Name of the workflow shown in GitHub Actions UI
+# --------------------------------------------
+# 🚀 CI + Auto Merge Workflow
+# Runs on Pull Requests targeting main
+# --------------------------------------------
+
 name: CI & Auto Merge
 
 # Trigger workflow when a Pull Request targets main branch
@@ -7,57 +11,58 @@ on:
     branches:
       - main
 
-# Define permissions required for auto-merge
+# Required permissions for auto-merge
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
   build-test-and-merge:
-    # Use Ubuntu latest runner
     runs-on: ubuntu-latest
 
+    # Set default working directory (since your app is inside /voxlibris)
+    defaults:
+      run:
+        working-directory: voxlibris
+
     steps:
-      # 1️⃣ Checkout repository code
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js environment
+      # 2️⃣ Setup Node.js (LTS recommended)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: 'npm' # Cache node_modules for faster builds
+          node-version: 20
+          cache: npm
+          cache-dependency-path: voxlibris/package-lock.json
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
         run: npm install
 
-      # 4️⃣ Run TypeScript type checking
-      # This ensures no TS errors exist
+      # 4️⃣ TypeScript type checking
       - name: Type check
         run: npx tsc --noEmit
 
-      # 5️⃣ Run ESLint (if configured)
-      # --if-present prevents failure if lint script doesn't exist
+      # 5️⃣ Lint check (if configured)
       - name: Lint
         run: npm run lint --if-present
 
-      # 6️⃣ Run tests (optional but recommended)
-      # Comment this out if you don't have tests yet
+      # 6️⃣ Run tests (optional)
       - name: Run tests
         run: npm test --if-present
 
       # 7️⃣ Build Next.js project
-      # This ensures the production build works
       - name: Build project
         run: npm run build
 
-      # 8️⃣ Auto-merge PR if everything above succeeds
-      # Only works for branches inside the same repository (not forks)
+      # 8️⃣ Auto-merge if everything succeeds
+      # Only merges internal branches (not forks)
       - name: Auto Merge PR
         if: success() && github.event.pull_request.head.repo.full_name == github.repository
         uses: pascalgn/automerge-action@v0.15.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash # Options: merge | squash | rebase
+          MERGE_METHOD: squash
