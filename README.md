@@ -32,16 +32,19 @@ This project combines:
 ## 🏗️ Tech Stack
 
 ### Frontend
+
 - Next.js
 - React
 - TypeScript
 - TailwindCSS
 
 ### AI & Processing
+
 - PDF parser
 - Text-to-Speech API
 
 ### Storage
+
 - MongoDB
 
 ---
