@@ -1,26 +1,27 @@
 # --------------------------------------------
-# 🚀 CI + Auto Merge Workflow
-# Runs on Pull Requests targeting main
+# 🚀 Continuous Integration (Next.js Project)
+# Runs on every push to feature branches
+# Checks:
+# - TypeScript errors
+# - ESLint issues
+# - Prettier formatting
+# - Production build
 # --------------------------------------------
 
-name: CI & Auto Merge
+name: CI
 
-# Trigger workflow when a Pull Request targets main branch
+# Run on push to any branch except main
 on:
-  pull_request:
-    branches:
+  push:
+    branches-ignore:
       - main
 
-# Required permissions for auto-merge
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  build-test-and-merge:
+  validate:
+    name: Validate Code
     runs-on: ubuntu-latest
 
-    # Set default working directory (since your app is inside /voxlibris)
+    # If your Next.js app is inside /voxlibris
     defaults:
       run:
         working-directory: voxlibris
@@ -30,7 +31,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js (LTS recommended)
+      # 2️⃣ Setup Node.js (LTS version recommended)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -40,29 +41,20 @@ jobs:
 
       # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # 4️⃣ TypeScript type checking
       - name: Type check
         run: npx tsc --noEmit
 
-      # 5️⃣ Lint check (if configured)
+      # 5️⃣ ESLint check
       - name: Lint
-        run: npm run lint --if-present
+        run: npm run lint
 
-      # 6️⃣ Run tests (optional)
-      - name: Run tests
-        run: npm test --if-present
+      # 6️⃣ Prettier format check
+      - name: Prettier Check
+        run: npm run format:check
 
-      # 7️⃣ Build Next.js project
+      # 7️⃣ Ensure production build works
       - name: Build project
         run: npm run build
-
-      # 8️⃣ Auto-merge if everything succeeds
-      # Only merges internal branches (not forks)
-      - name: Auto Merge PR
-        if: success() && github.event.pull_request.head.repo.full_name == github.repository
-        uses: pascalgn/automerge-action@v0.15.6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash
