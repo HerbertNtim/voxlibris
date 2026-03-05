@@ -73,7 +73,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24.x
+          node-version: 20
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
