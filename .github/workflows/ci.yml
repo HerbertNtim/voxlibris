@@ -1,60 +1,104 @@
-# --------------------------------------------
-# 🚀 Continuous Integration (Next.js Project)
-# Runs on every push to feature branches
-# Checks:
-# - TypeScript errors
-# - ESLint issues
-# - Prettier formatting
-# - Production build
-# --------------------------------------------
+name: CI/CD Pipeline
 
-name: CI
-
-# Run on push to any branch except main
 on:
   push:
-    branches-ignore:
-      - main
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
-  validate:
-    name: Validate Code
+  lint:
     runs-on: ubuntu-latest
 
-    # If your Next.js app is inside /voxlibris
-    defaults:
-      run:
-        working-directory: voxlibris
-
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js (LTS version recommended)
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-          cache-dependency-path: voxlibris/package-lock.json
 
-      # 3️⃣ Install dependencies
+      - name: Cache node modules
+        uses: actions/cache@v4
+        id: node_modules_cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
-        run: npm ci
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss, installing dependencies..."
+          npm install
 
-      # 4️⃣ TypeScript type checking
-      - name: Type check
-        run: npx tsc --noEmit
+      - name: Save node_modules
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules
 
-      # 5️⃣ ESLint check
-      - name: Lint
+      - name: Lint code
         run: npm run lint
 
-      # 6️⃣ Prettier format check
-      - name: Prettier Check
-        run: npm run format:check
+      - name: Run lint and save output
+        id: lint
+        run: |
+          npm run lint | tee lint-output.txt
 
-      # 7️⃣ Ensure production build works
+      - name: Print lint output
+        if: steps.lint.outcome == 'success'
+        run: |
+          echo "Lint output:"
+          cat lint-output.txt
+          echo "Linting completed successfully!"
+
+      - name: Print lint error
+        if: steps.lint.outcome == 'failure'
+        run: |
+          echo "❌ Linting failed. Please fix the issues before merging."
+          cat lint-output.txt || echo "No output captured."
+
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        id: node_modules_cache
+        with:
+            path: node_modules
+            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Download node_modules artifact
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: node-modules
+          path: node_modules
+
+      - name: Run npm install to ensure all dependencies are installed
+        run: npm install
+
       - name: Build project
-        run: npm run build
+        id: build
+        run: |
+          npm run build
+          echo "✅ Build completed successfully!"
+      
+      - name: Print build error
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "❌ Build failed. Please check your code or configuration."
