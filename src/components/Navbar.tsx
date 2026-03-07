@@ -1,28 +1,31 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import {
+  Show,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useUser,
+} from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  {
-    label: 'Library',
-    href: '/',
-  },
-  {
-    label: 'Add New',
-    href: '/books/new',
-  },
+  { label: 'Library', href: '/' },
+  { label: 'Add New', href: '/books/new' },
 ];
 
 const Navbar = () => {
   const pathName = usePathname();
+  const { user } = useUser();
+
   return (
-    <header className="w-full fixed z-50 bg-('--bg-primary')">
+    <header className="w-full fixed z-50 bg-(--bg-primary)">
       <div className="wrapper navbar-height py-4 flex justify-between items-center">
-        <Link href={'/'} className="flex items-center gap-0.5">
-          <Image src={'/logo.png'} alt="VoxLibris" width={42} height={26} />
+        <Link href="/" className="flex items-center gap-0.5">
+          <Image src="/logo.png" alt="VoxLibris" width={42} height={26} />
           <span className="logo-text">VoxLibris</span>
         </Link>
 
@@ -44,6 +47,22 @@ const Navbar = () => {
               </Link>
             );
           })}
+
+          <div className="flex gap-7.5 items-center cursor-pointer">
+            <Show when="signed-out">
+              <SignInButton mode="modal" />
+            </Show>
+            <Show when="signed-in">
+              <div className="nav-user-link">
+                <UserButton />
+                {user?.firstName && (
+                  <Link href="/subscriptions" className="nav-user-name">
+                    {user.firstName}
+                  </Link>
+                )}
+              </div>
+            </Show>
+          </div>
         </nav>
       </div>
     </header>
