@@ -3,6 +3,7 @@ import { IBM_Plex_Serif, Mona_Sans } from 'next/font/google';
 
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const ibmPlexSerif = IBM_Plex_Serif({
   variable: '--font-ibm-plex-serif',
@@ -33,8 +34,10 @@ export default function RootLayout({
       <body
         className={`${ibmPlexSerif.variable} ${monaSans.variable} relative font-sans antialiased`}
       >
-        <Navbar />
-        {children}
+        <ClerkProvider>
+          <Navbar />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
