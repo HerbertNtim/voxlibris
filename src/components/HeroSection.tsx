@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -24,9 +25,20 @@ const HeroSection = () => {
           </div>
 
           {/* Center part - Desktop*/}
-          <div></div>
+          <div className="library-hero-illustration-desktop">
+            <Image
+              src={'/hero-illustration.png'}
+              alt="hero illustration"
+              width={400}
+              height={400}
+              className="object-contain"
+            />
+          </div>
 
           {/* Center part - Mobile (Hidden on Desktop) */}
+          <div></div>
+
+          {/* Right Part */}
           <div></div>
         </div>
       </div>
