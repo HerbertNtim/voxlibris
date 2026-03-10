@@ -28,7 +28,7 @@ const HeroSection = () => {
           <div className="library-hero-illustration-desktop">
             <Image
               src={'/hero-illustration.png'}
-              alt="hero illustration"
+              alt="hero book illustration"
               width={400}
               height={400}
               className="object-contain"
@@ -39,7 +39,15 @@ const HeroSection = () => {
           <div></div>
 
           {/* Right Part */}
-          <div></div>
+          <div className="library-hero-illustration">
+            <Image
+              src={'/hero-illustration.png'}
+              alt="hero book illustration"
+              width={300}
+              height={300}
+              className="object-contain"
+            />
+          </div>
         </div>
       </div>
     </section>
