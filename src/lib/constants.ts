@@ -70,10 +70,10 @@ export const sampleBooks = [
   },
   {
     _id: '9',
-    title: 'The Courage to Be Disliked',
-    author: 'Fumitake Koga & Ichiro Kishimi',
-    slug: 'the-courage-to-be-disliked',
-    coverURL: 'https://covers.openlibrary.org/b/isbn/9781501197274-L.jpg',
+    title: 'The 7 Habits of Highly Effective People',
+    author: 'Stephen R. Covey',
+    slug: 'the-7-habits-of-highly-effective-people',
+    coverURL: 'https://covers.openlibrary.org/b/id/15131309-L.jpg',
     coverColor: '#f8f4e9',
   },
   {
@@ -82,6 +82,22 @@ export const sampleBooks = [
     author: 'George Orwell',
     slug: '1984',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg',
+    coverColor: '#f8f4e9',
+  },
+  {
+    _id: '11',
+    title: 'Design Patterns',
+    author: 'Gang of Four',
+    slug: 'design-patterns',
+    coverURL: 'https://covers.openlibrary.org/b/isbn/9780201633610-L.jpg',
+    coverColor: '#f8f4e9',
+  },
+  {
+    _id: '12',
+    title: 'The Pragmatic Programmer',
+    author: 'Andrew Hunt & David Thomas',
+    slug: 'the-pragmatic-programmer',
+    coverURL: 'https://covers.openlibrary.org/b/isbn/9780201616224-L.jpg',
     coverColor: '#f8f4e9',
   },
 ];
