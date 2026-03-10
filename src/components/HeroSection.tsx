@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const HeroSection = () => {
@@ -6,7 +7,21 @@ const HeroSection = () => {
       <div className="library-hero-card">
         <div className="library-hero-content">
           {/* Left Part */}
-          <div></div>
+          <div className="library-hero-text">
+            <h1 className="library-hero-title text-4xl font-serif font-bold">
+              Your Library
+            </h1>
+            <p className="library-hero-description">
+              Convert your books into interactive AI conversations.{' '}
+              <br className="hidden md:block" />
+              Listen, learn, and discuss your favorite reads.
+            </p>
+
+            <Link href="/books/new" className="library-cta-primary">
+              <span className="text-3xl font-light mb-1 mr-2">+</span>
+              <span className="text-[#212a3b]">Add Book</span>
+            </Link>
+          </div>
 
           {/* Center part - Desktop*/}
           <div></div>
