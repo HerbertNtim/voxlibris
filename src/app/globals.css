@@ -629,13 +629,13 @@
     }
   }
   .voice-selector-option-selected {
-    @apply bg-[var(--accent-light)] border-[var(--accent-warm)];
+    @apply bg-(--accent-light) border-(--accent-warm);
   }
   .voice-selector-option-default {
     @apply bg-white;
 
     &:hover {
-      @apply bg-[var(--bg-secondary)];
+      @apply bg-(--bg-secondary);
     }
   }
   .voice-selector-option-disabled {
@@ -659,20 +659,20 @@
     @apply group-hover:-translate-y-1;
   }
   .book-card-spine {
-    @apply absolute -left-1 top-2 bottom-2 w-3 bg-gradient-to-r from-[#8B7355] to-[#A08060] rounded-l-md z-0;
+    @apply absolute -left-1 top-2 bottom-2 w-3 bg-linear-to-r from-[#8B7355] to-[#A08060] rounded-l-md z-0;
   }
   .book-card-cover-wrapper {
-    @apply relative bg-white rounded-[14px] overflow-hidden flex items-center justify-center h-[205px] md:h-[240px];
+    @apply relative bg-white rounded-[14px] overflow-hidden flex items-center justify-center h-51.25 md:h-60;
   }
   .book-card-cover {
-    @apply w-auto h-[170px] md:h-[200px] object-cover rounded-lg;
+    @apply w-auto h-42.5 md:h-50 object-cover rounded-lg;
     box-shadow: var(--shadow-book);
   }
   .book-card-meta {
     @apply mt-4 md:mt-5 flex-1 flex flex-col gap-1;
   }
   .book-card-title {
-    @apply font-bold text-[#212a3b] line-clamp-1 text-base md:text-xl leading-[22px] md:leading-[30px];
+    @apply font-bold text-[#212a3b] line-clamp-1 text-base md:text-xl leading-5.5 md:leading-7.5;
     font-family: 'IBM Plex Serif', serif;
   }
   .book-card-author {

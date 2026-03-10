@@ -2,12 +2,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { BookCardProps } from '../../types';
 
-const BookCard = ({ title, author, coverURL, slug }: BookCardProps) => {
+const BookCard = ({
+  title,
+  author,
+  coverURL,
+  slug,
+  coverColor,
+}: BookCardProps) => {
   return (
     <Link href={`/books/${slug}`}>
       <article className="book-card">
-        <figure className="book-card-figure">
-          <div className="book-card-cover-wrapper">
+        <figure className={'book-card-figure'}>
+          <div
+            className="book-card-cover-wrapper"
+            style={{ backgroundColor: coverColor }}
+          >
             <Image
               src={coverURL}
               alt={title}

@@ -3,6 +3,8 @@ export const BRAND_COLOR = '#212a3b'; // Dark blue-gray
 export const BRAND_COLOR_HOVER = '#3d485e'; // Medium blue-gray
 
 // Sample books for the homepage (using Open Library covers)
+const bgColors = ['#e0e0e0', '#f3e4c7', '#faf3e0'];
+
 export const sampleBooks = [
   {
     _id: '1',
@@ -10,7 +12,7 @@ export const sampleBooks = [
     author: 'Robert Cecil Martin',
     slug: 'clean-code',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[0],
   },
   {
     _id: '2',
@@ -18,7 +20,7 @@ export const sampleBooks = [
     author: 'David Flanagan',
     slug: 'javascript-the-definitive-guide',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780596805524-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[1],
   },
   {
     _id: '3',
@@ -26,7 +28,7 @@ export const sampleBooks = [
     author: 'Aldous Huxley',
     slug: 'brave-new-world',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780060850524-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[2],
   },
   {
     _id: '4',
@@ -34,7 +36,7 @@ export const sampleBooks = [
     author: 'Robert Kiyosaki',
     slug: 'rich-dad-poor-dad',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9781612680194-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[0],
   },
   {
     _id: '5',
@@ -42,7 +44,7 @@ export const sampleBooks = [
     author: 'Cal Newport',
     slug: 'deep-work',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[1],
   },
   {
     _id: '6',
@@ -50,7 +52,7 @@ export const sampleBooks = [
     author: 'Dale Carnegie',
     slug: 'how-to-win-friends-and-influence-people',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780671027032-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[2],
   },
   {
     _id: '7',
@@ -58,7 +60,7 @@ export const sampleBooks = [
     author: 'Charles Duhigg',
     slug: 'the-power-of-habit',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9781400069286-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[0],
   },
   {
     _id: '8',
@@ -66,7 +68,7 @@ export const sampleBooks = [
     author: 'James Clear',
     slug: 'atomic-habits',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[1],
   },
   {
     _id: '9',
@@ -74,7 +76,7 @@ export const sampleBooks = [
     author: 'Stephen R. Covey',
     slug: 'the-7-habits-of-highly-effective-people',
     coverURL: 'https://covers.openlibrary.org/b/id/15131309-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[2],
   },
   {
     _id: '10',
@@ -82,7 +84,7 @@ export const sampleBooks = [
     author: 'George Orwell',
     slug: '1984',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[0],
   },
   {
     _id: '11',
@@ -90,7 +92,7 @@ export const sampleBooks = [
     author: 'Gang of Four',
     slug: 'design-patterns',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780201633610-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[1],
   },
   {
     _id: '12',
@@ -98,7 +100,7 @@ export const sampleBooks = [
     author: 'Andrew Hunt & David Thomas',
     slug: 'the-pragmatic-programmer',
     coverURL: 'https://covers.openlibrary.org/b/isbn/9780201616224-L.jpg',
-    coverColor: '#f8f4e9',
+    coverColor: bgColors[2],
   },
 ];
 

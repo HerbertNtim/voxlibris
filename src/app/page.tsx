@@ -15,6 +15,7 @@ const Home = () => {
             coverURL={book.coverURL}
             slug={book.slug}
             author={book.author}
+            coverColor={book.coverColor}
           />
         ))}
       </div>
