@@ -1,3 +1,4 @@
+import UploadForm from '@/components/UploadForm';
 import React from 'react';
 
 const NewBookPage = () => {
@@ -9,6 +10,8 @@ const NewBookPage = () => {
           Upload a PDF to generate your interactive reading experience.
         </p>
       </section>
+
+      <UploadForm />
     </main>
   );
 };
