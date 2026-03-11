@@ -200,10 +200,10 @@
     @apply py-18 min-h-screen max-w-7xl px-5 mx-auto w-full flex flex-col pb-12 items-center container;
   }
   .page-title {
-    @apply !text-3xl font-bold text-center;
+    @apply text-3xl! font-bold text-center;
   }
   .page-description {
-    @apply !mt-3 text-center text-lg;
+    @apply mt-3! text-center text-lg;
   }
   .new-book {
     @apply max-w-7xl px-5 mx-auto w-full space-y-6 py-18 min-h-screen;
@@ -215,7 +215,7 @@
     @apply relative z-20 flex flex-col justify-center items-center p-7;
   }
   .form-btn {
-    @apply !w-full h-14 rounded-[10px] bg-[#663820] cursor-pointer hover:bg-[#7a4528] text-xl text-white font-bold transition-colors;
+    @apply w-full! h-14 rounded-[10px] bg-[#663820] cursor-pointer hover:bg-[#7a4528] text-xl text-white font-bold transition-colors;
     font-family: 'IBM Plex Serif', serif;
   }
   .loading-wrapper {
@@ -231,7 +231,7 @@
     @apply animate-spin origin-center mx-auto;
   }
   .loading-title {
-    @apply text-2xl font-bold text-[var(--text-primary)];
+    @apply text-2xl font-bold text-(--text-primary);
   }
   .loading-progress {
     @apply w-full space-y-2 text-sm;
@@ -240,16 +240,16 @@
     @apply flex justify-center items-center space-x-2;
   }
   .loading-progress-status {
-    @apply w-2 h-2 text-[var(--text-secondary)] bg-[var(--success)] rounded-full animate-pulse;
+    @apply w-2 h-2 text-(--text-secondary) bg-(--success) rounded-full animate-pulse;
   }
   .select-trigger {
-    @apply !w-full !h-12 rounded-lg;
+    @apply w-full! h-12! rounded-lg;
   }
   .volume {
-    @apply !ml-auto w-4 h-4 animate-pulse text-[var(--accent-warm)];
+    @apply ml-auto! w-4 h-4 animate-pulse text-(--accent-warm);
   }
   .select-content {
-    @apply rounded-xl border border-[var(--border-subtle)] max-h-[400px] shadow-[var(--shadow-soft)];
+    @apply rounded-xl border border-(--border-subtle) max-h-100 shadow-(--shadow-soft);
   }
   .select-item {
     @apply hover:rounded-lg font-medium text-lg;
