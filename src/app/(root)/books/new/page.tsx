@@ -1,5 +1,4 @@
 import UploadForm from '@/components/UploadForm';
-import React from 'react';
 
 const NewBookPage = () => {
   return (

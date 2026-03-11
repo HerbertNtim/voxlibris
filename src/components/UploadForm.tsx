@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, ImageIcon } from 'lucide-react';
 import { UploadSchema } from '@/lib/zod';
-import { BookUploadFormValues } from '../../types';
 import {
   Form,
   FormControl,
@@ -24,6 +23,7 @@ import {
 import FileUploader from './FileUploader';
 import VoiceSelector from './VoiceSelector';
 import LoadingOverlay from './LoadingOverlay';
+import { BookUploadFormValues } from 'types';
 
 const UploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +33,7 @@ const UploadForm = () => {
     defaultValues: {
       title: '',
       author: '',
-      voice: DEFAULT_VOICE,
+      persona: DEFAULT_VOICE,
     },
   });
 

@@ -3,7 +3,7 @@
 import React, { useCallback, useRef } from 'react';
 import { useController, FieldValues } from 'react-hook-form';
 import { X } from 'lucide-react';
-import { FileUploadFieldProps } from '@/types';
+import { FileUploadFieldProps } from 'types';
 import { cn } from '@/lib/utils';
 import {
   FormItem,
