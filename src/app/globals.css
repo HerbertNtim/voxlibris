@@ -276,36 +276,36 @@
 
   /* Button utilities */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-[var(--color-brand)] hover:bg-[var(--color-brand-hover)] text-white font-bold rounded-[10px] transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3 bg-(--color-brand) hover:bg-(--color-brand-hover) text-white font-bold rounded-[10px] transition-colors;
     font-family: 'IBM Plex Serif', serif;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-[var(--text-secondary)] font-medium rounded-[10px] transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-(--text-secondary) font-medium rounded-[10px] transition-colors;
   }
 
   /* Layout utilities */
   .navbar-height {
-    @apply h-[var(--navbar-height)];
+    @apply h-(--navbar-height);
   }
 
   /* Typography utilities */
   .text-brand {
-    @apply text-[var(--color-brand)];
+    @apply text-(--color-brand);
   }
   .border-brand {
-    @apply border-[var(--color-brand)];
+    @apply border-(--color-brand);
   }
   .page-title-xl {
-    @apply text-4xl md:text-5xl font-semibold text-black tracking-[-0.02em] leading-[54px] font-serif;
+    @apply text-4xl md:text-5xl font-semibold text-black tracking-[-0.02em] leading-13.5 font-serif;
   }
   .section-title {
-    @apply text-2xl md:text-[30px] font-semibold text-black leading-[30px] font-serif;
+    @apply text-2xl md:text-[30px] font-semibold text-black leading-7.5 font-serif;
   }
   .book-title-lg {
     @apply text-[30px] font-semibold text-black leading-9 mb-2 font-serif;
   }
   .subtitle {
-    @apply text-xl text-[var(--text-secondary)] leading-7;
+    @apply text-xl text-(--text-secondary) leading-7;
   }
   .icon-sm {
     @apply w-5 h-5;
