@@ -38,9 +38,7 @@ const UploadForm = () => {
     defaultValues: {
       title: '',
       author: '',
-      persona: '',
-      pdfFile: undefined,
-      coverImage: undefined,
+      voice: DEFAULT_VOICE,
     },
   });
 
