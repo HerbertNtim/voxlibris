@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, ImageIcon } from 'lucide-react';
 import { UploadSchema } from '@/lib/zod';
-import { BookUploadFormValues } from '@/types';
+import { BookUploadFormValues } from '../../types';
 import {
   Form,
   FormControl,
