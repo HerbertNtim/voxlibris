@@ -179,31 +179,31 @@
     @apply max-w-7xl px-5 mx-auto w-full;
   }
   .container {
-    @apply pt-[94px] pb-18 min-h-screen;
+    @apply pt-23.5 pb-18 min-h-screen;
   }
   .navItem {
-    @apply px-1 sm:px-3 text-sm sm:text-base font-medium flex items-center cursor-pointer text-[var(--text-primary)];
+    @apply px-1 sm:px-3 text-sm sm:text-base font-medium flex items-center cursor-pointer text-(--text-primary);
   }
   .input-reset {
-    @apply h-12 border-none lg:!text-lg shadow-none focus:outline-none focus-visible:ring-0;
+    @apply h-12 border-none lg:text-lg! shadow-none focus:outline-none focus-visible:ring-0;
   }
   .label {
-    @apply text-lg mb-1 !font-medium;
+    @apply text-lg mb-1 font-medium!;
   }
   .auth-wrapper {
     @apply max-w-7xl px-5 mx-auto w-full min-h-screen pt-20 flex flex-col items-center justify-center py-10;
   }
   .auth-shadow {
-    @apply rounded-2xl bg-[var(--accent-light)];
+    @apply rounded-2xl bg-(--accent-light);
   }
   .clerk-subscriptions {
     @apply py-18 min-h-screen max-w-7xl px-5 mx-auto w-full flex flex-col pb-12 items-center container;
   }
   .page-title {
-    @apply !text-3xl font-bold text-center;
+    @apply text-3xl! font-bold text-center;
   }
   .page-description {
-    @apply !mt-3 text-center text-lg;
+    @apply mt-3! text-center text-lg;
   }
   .new-book {
     @apply max-w-7xl px-5 mx-auto w-full space-y-6 py-18 min-h-screen;
@@ -215,7 +215,7 @@
     @apply relative z-20 flex flex-col justify-center items-center p-7;
   }
   .form-btn {
-    @apply !w-full h-14 rounded-[10px] bg-[#663820] cursor-pointer hover:bg-[#7a4528] text-xl text-white font-bold transition-colors;
+    @apply w-full! h-14 rounded-[10px] bg-[#663820] cursor-pointer hover:bg-[#7a4528] text-xl text-white font-bold transition-colors;
     font-family: 'IBM Plex Serif', serif;
   }
   .loading-wrapper {
@@ -231,7 +231,7 @@
     @apply animate-spin origin-center mx-auto;
   }
   .loading-title {
-    @apply text-2xl font-bold text-[var(--text-primary)];
+    @apply text-2xl font-bold text-(--text-primary);
   }
   .loading-progress {
     @apply w-full space-y-2 text-sm;
@@ -240,16 +240,16 @@
     @apply flex justify-center items-center space-x-2;
   }
   .loading-progress-status {
-    @apply w-2 h-2 text-[var(--text-secondary)] bg-[var(--success)] rounded-full animate-pulse;
+    @apply w-2 h-2 text-(--text-secondary) bg-(--success) rounded-full animate-pulse;
   }
   .select-trigger {
-    @apply !w-full !h-12 rounded-lg;
+    @apply w-full! h-12! rounded-lg;
   }
   .volume {
-    @apply !ml-auto w-4 h-4 animate-pulse text-[var(--accent-warm)];
+    @apply ml-auto! w-4 h-4 animate-pulse text-(--accent-warm);
   }
   .select-content {
-    @apply rounded-xl border border-[var(--border-subtle)] max-h-[400px] shadow-[var(--shadow-soft)];
+    @apply rounded-xl border border-(--border-subtle) max-h-100 shadow-(--shadow-soft);
   }
   .select-item {
     @apply hover:rounded-lg font-medium text-lg;
@@ -276,36 +276,36 @@
 
   /* Button utilities */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-[var(--color-brand)] hover:bg-[var(--color-brand-hover)] text-white font-bold rounded-[10px] transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3 bg-(--color-brand) hover:bg-(--color-brand-hover) text-white font-bold rounded-[10px] transition-colors;
     font-family: 'IBM Plex Serif', serif;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-[var(--text-secondary)] font-medium rounded-[10px] transition-colors;
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white hover:bg-gray-50 text-(--text-secondary) font-medium rounded-[10px] transition-colors;
   }
 
   /* Layout utilities */
   .navbar-height {
-    @apply h-[var(--navbar-height)];
+    @apply h-(--navbar-height);
   }
 
   /* Typography utilities */
   .text-brand {
-    @apply text-[var(--color-brand)];
+    @apply text-(--color-brand);
   }
   .border-brand {
-    @apply border-[var(--color-brand)];
+    @apply border-(--color-brand);
   }
   .page-title-xl {
-    @apply text-4xl md:text-5xl font-semibold text-black tracking-[-0.02em] leading-[54px] font-serif;
+    @apply text-4xl md:text-5xl font-semibold text-black tracking-[-0.02em] leading-13.5 font-serif;
   }
   .section-title {
-    @apply text-2xl md:text-[30px] font-semibold text-black leading-[30px] font-serif;
+    @apply text-2xl md:text-[30px] font-semibold text-black leading-7.5 font-serif;
   }
   .book-title-lg {
     @apply text-[30px] font-semibold text-black leading-9 mb-2 font-serif;
   }
   .subtitle {
-    @apply text-xl text-[var(--text-secondary)] leading-7;
+    @apply text-xl text-(--text-secondary) leading-7;
   }
   .icon-sm {
     @apply w-5 h-5;

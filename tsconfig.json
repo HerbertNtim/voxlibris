@@ -14,17 +14,21 @@
     "jsx": "react-jsx",
     "incremental": true,
     "ignoreDeprecations": "5.0",
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "types": ["./types.d.ts"]
+    },
+
     "plugins": [
       {
         "name": "next"
       }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]
   },
   "include": [
     "next-env.d.ts",
+    "types.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",

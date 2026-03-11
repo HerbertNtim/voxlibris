@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { BookCardProps } from '../../types';
+import { BookCardProps } from 'types';
 
 const BookCard = ({
   title,

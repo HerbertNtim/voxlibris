@@ -1,13 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import {
-  Show,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useUser,
-} from '@clerk/nextjs';
+import { Show, SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
