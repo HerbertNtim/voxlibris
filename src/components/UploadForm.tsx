@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Upload, ImageIcon } from 'lucide-react';
@@ -27,11 +27,6 @@ import LoadingOverlay from './LoadingOverlay';
 
 const UploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const form = useForm<BookUploadFormValues>({
     resolver: zodResolver(UploadSchema),
@@ -42,118 +37,13 @@ const UploadForm = () => {
     },
   });
 
-  const onSubmit = async (data: BookUploadFormValues) => {
-    if (!userId) {
-      return toast.error('Please login to upload books');
-    }
-
+  const onSubmit = async (values: BookUploadFormValues) => {
     setIsSubmitting(true);
-
-    // PostHog -> Track Book Uploads...
-
-    try {
-      const existsCheck = await checkBookExists(data.title);
-
-      if (existsCheck.exists && existsCheck.book) {
-        toast.info('Book with same title already exists.');
-        form.reset();
-        router.push(`/books/${existsCheck.book.slug}`);
-        return;
-      }
-
-      const fileTitle = data.title.replace(/\s+/g, '-').toLowerCase();
-      const pdfFile = data.pdfFile;
-
-      const parsedPDF = await parsePDFFile(pdfFile);
-
-      if (parsedPDF.content.length === 0) {
-        toast.error(
-          'Failed to parse PDF. Please try again with a different file.',
-        );
-        return;
-      }
-
-      const uploadedPdfBlob = await upload(fileTitle, pdfFile, {
-        access: 'public',
-        handleUploadUrl: '/api/upload',
-        contentType: 'application/pdf',
-      });
-
-      let coverUrl: string;
-
-      if (data.coverImage) {
-        const coverFile = data.coverImage;
-        const uploadedCoverBlob = await upload(
-          `${fileTitle}_cover.png`,
-          coverFile,
-          {
-            access: 'public',
-            handleUploadUrl: '/api/upload',
-            contentType: coverFile.type,
-          },
-        );
-        coverUrl = uploadedCoverBlob.url;
-      } else {
-        const response = await fetch(parsedPDF.cover);
-        const blob = await response.blob();
-
-        const uploadedCoverBlob = await upload(`${fileTitle}_cover.png`, blob, {
-          access: 'public',
-          handleUploadUrl: '/api/upload',
-          contentType: 'image/png',
-        });
-        coverUrl = uploadedCoverBlob.url;
-      }
-
-      const book = await createBook({
-        clerkId: userId,
-        title: data.title,
-        author: data.author,
-        persona: data.persona,
-        fileURL: uploadedPdfBlob.url,
-        fileBlobKey: uploadedPdfBlob.pathname,
-        coverURL: coverUrl,
-        fileSize: pdfFile.size,
-      });
-
-      if (!book.success) {
-        toast.error((book.error as string) || 'Failed to create book');
-        if (book.isBillingError) {
-          router.push('/subscriptions');
-        }
-        return;
-      }
-
-      if (book.alreadyExists) {
-        toast.info('Book with same title already exists.');
-        form.reset();
-        router.push(`/books/${book.data.slug}`);
-        return;
-      }
-
-      const segments = await saveBookSegments(
-        book.data._id,
-        userId,
-        parsedPDF.content,
-      );
-
-      if (!segments.success) {
-        toast.error('Failed to save book segments');
-        throw new Error('Failed to save book segments');
-      }
-
-      form.reset();
-      router.push('/');
-    } catch (error) {
-      console.error(error);
-
-      toast.error('Failed to upload book. Please try again later.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    console.log('Form Values:', values);
+    // Simulate a delay for demonstration purposes
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    setIsSubmitting(false);
   };
-
-  if (!isMounted) return null;
 
   return (
     <>
