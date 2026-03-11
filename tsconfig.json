@@ -15,10 +15,9 @@
     "incremental": true,
     "ignoreDeprecations": "6.0",
 
-    "baseUrl": ".",
-
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "types": ["./types.d.ts"]
     },
 
     "plugins": [
