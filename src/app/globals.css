@@ -271,7 +271,7 @@
     box-shadow: var(--shadow-soft-lg);
   }
   .bg-brand {
-    @apply bg-[var(--accent-warm)];
+    @apply bg-(--accent-warm);
   }
 
   /* Button utilities */
