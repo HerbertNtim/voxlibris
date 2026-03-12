@@ -3,10 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
+      - '**'
 
 jobs:
   lint:
@@ -84,8 +81,8 @@ jobs:
         uses: actions/cache@v4
         id: node_modules_cache
         with:
-            path: node_modules
-            key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Download node_modules artifact
         if: steps.node_modules_cache.outputs.cache-hit != 'true'
@@ -102,7 +99,7 @@ jobs:
         run: |
           npm run build
           echo "✅ Build completed successfully!"
-      
+
       - name: Print build error
         if: steps.build.outcome == 'failure'
         run: |
