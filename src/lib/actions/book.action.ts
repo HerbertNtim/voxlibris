@@ -4,6 +4,20 @@ import { generateSlug, serializeData } from '../utils';
 import Book from '@/database/models/book.model';
 import BookSegment from '@/database/models/book-segment.model';
 
+export const checkBookExists = async (title: string) => {
+  try {
+    await connectToDatabase();
+
+    const slug = generateSlug(title);
+
+    const existingBook = await Book.findOne({ slug }).lean();
+    return { success: true, data: serializeData(existingBook) };
+  } catch (error) {
+    console.error('Error checking book existence:', error);
+    return { success: false, error };
+  }
+};
+
 export const createBook = async (data: CreateBook) => {
   try {
     await connectToDatabase();
