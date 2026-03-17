@@ -24,9 +24,15 @@ import FileUploader from './FileUploader';
 import VoiceSelector from './VoiceSelector';
 import LoadingOverlay from './LoadingOverlay';
 import { BookUploadFormValues } from 'types';
+import { useAuth } from '@clerk/nextjs';
+import { toast } from 'sonner';
+import { checkBookExists } from '@/lib/actions/book.action';
+import { useRouter } from 'next/navigation';
 
 const UploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { userId } = useAuth();
+  const router = useRouter();
 
   const form = useForm<BookUploadFormValues>({
     resolver: zodResolver(UploadSchema),
@@ -38,11 +44,27 @@ const UploadForm = () => {
   });
 
   const onSubmit = async (values: BookUploadFormValues) => {
+    if (!userId) {
+      toast('You must be logged in to upload a book.');
+      return;
+    }
+
     setIsSubmitting(true);
-    console.log('Form Values:', values);
-    // Simulate a delay for demonstration purposes
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    setIsSubmitting(false);
+    try {
+      const existCheck = await checkBookExists(values.title);
+      if (existCheck.exists && existCheck.book) {
+        toast.info(
+          `A book with the title "${values.title}" already exists. Please choose a different title or delete the existing book first.`,
+        );
+        form.reset();
+        router.push(`/books/${existCheck.book.slug}`);
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+      toast.error('Upload failed. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
