@@ -22,7 +22,7 @@ import {
 } from '@/lib/constants';
 import { useAuth } from '@clerk/nextjs';
 import { toast } from 'sonner';
-import { checkBookExists } from '@/lib/actions/book.action';
+import { checkBookExists, createBook } from '@/lib/actions/book.action';
 import { useRouter } from 'next/navigation';
 
 import FileUploader from './FileUploader';
@@ -65,7 +65,7 @@ const UploadForm = () => {
       }
 
       const fileTitle = data.title.replace(/\s+/g, '-').toLowerCase();
-      const pdfFile = data.pdfFile[0];
+      const pdfFile = data.pdfFile;
 
       const parsedPDF = await parsePDFFile(pdfFile);
 
@@ -85,8 +85,8 @@ const UploadForm = () => {
 
       let coverUrl: string;
 
-      if (data.coverImage && data.coverImage.length > 0) {
-        const coverFile = data.coverImage[0];
+      if (data.coverImage) {
+        const coverFile = data.coverImage;
         const uploadedCoverBlob = await upload(
           `${fileTitle}_cover.png`,
           coverFile,
@@ -97,7 +97,28 @@ const UploadForm = () => {
           },
         );
         coverUrl = uploadedCoverBlob.url;
+      } else {
+        const response = await fetch(parsedPDF.cover);
+        const blob = await response.blob();
+
+        const uploadedCoverBlob = await upload(`${fileTitle}_cover.png`, blob, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+          contentType: 'image/png',
+        });
+        coverUrl = uploadedCoverBlob.url;
       }
+
+      const book = await createBook({
+        clerkId: userId,
+        title: data.title,
+        author: data.author,
+        persona: data.persona,
+        fileURL: uploadedPdfBlob.url,
+        fileBlobKey: uploadedPdfBlob.pathname,
+        coverURL: coverUrl,
+        fileSize: pdfFile.size,
+      });
     } catch (error) {
       console.error('Upload failed:', error);
       toast.error('Upload failed. Please try again.');
