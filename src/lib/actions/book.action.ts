@@ -13,10 +13,10 @@ export const checkBookExists = async (title: string) => {
     const slug = generateSlug(title);
 
     const existingBook = await Book.findOne({ slug }).lean();
-    return { success: true, data: serializeData(existingBook) };
+    return { exists: true, book: serializeData(existingBook) };
   } catch (error) {
     console.error('Error checking book existence:', error);
-    return { success: false, error };
+    return { exists: false, error };
   }
 };
 
@@ -29,12 +29,15 @@ export const createBook = async (data: CreateBook) => {
     const existingBook = await Book.findOne({ slug }).lean();
 
     if (existingBook) {
-      return { success: true, data: serializeData(existingBook) };
+      return {
+        success: true,
+        data: serializeData(existingBook),
+        alreadyExists: true,
+      };
     }
-
     const book = new Book({ ...data, slug, totalSegments: 0 });
 
-    return { success: true, data: serializeData(book) };
+    return { success: true, data: serializeData(book), alreadyExists: false };
   } catch (e) {
     console.error('Error creating book:', e);
     return { success: false, error: e };
