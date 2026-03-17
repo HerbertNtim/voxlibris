@@ -15,14 +15,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  ACCEPTED_PDF_TYPES,
-  ACCEPTED_IMAGE_TYPES,
-  DEFAULT_VOICE,
-} from '@/lib/constants';
+import { ACCEPTED_PDF_TYPES, ACCEPTED_IMAGE_TYPES } from '@/lib/constants';
 import { useAuth } from '@clerk/nextjs';
 import { toast } from 'sonner';
-import { checkBookExists, createBook } from '@/lib/actions/book.action';
+import {
+  checkBookExists,
+  createBook,
+  saveBookSegments,
+} from '@/lib/actions/book.action';
 import { useRouter } from 'next/navigation';
 
 import FileUploader from './FileUploader';
@@ -42,7 +42,9 @@ const UploadForm = () => {
     defaultValues: {
       title: '',
       author: '',
-      persona: DEFAULT_VOICE,
+      persona: '',
+      pdfFile: undefined,
+      coverImage: undefined,
     },
   });
 
@@ -119,6 +121,32 @@ const UploadForm = () => {
         coverURL: coverUrl,
         fileSize: pdfFile.size,
       });
+
+      if (!book.success) {
+        toast.error('Failed to create book record. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (book.alreadyExists) {
+        toast.info(
+          'A book with this title already exists. Please choose a different title.',
+        );
+        form.reset();
+        router.push(`/books/${book.data.slug}`);
+        return;
+      }
+
+      const segments = await saveBookSegments(
+        book.data._id,
+        userId,
+        parsedPDF.content,
+      );
+
+      if (!segments) {
+        toast.error('Failed to save book segments. Please try again.');
+        throw new Error('Failed to save book segments');
+      }
     } catch (error) {
       console.error('Upload failed:', error);
       toast.error('Upload failed. Please try again.');
