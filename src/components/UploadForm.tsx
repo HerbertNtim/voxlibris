@@ -20,14 +20,17 @@ import {
   ACCEPTED_IMAGE_TYPES,
   DEFAULT_VOICE,
 } from '@/lib/constants';
-import FileUploader from './FileUploader';
-import VoiceSelector from './VoiceSelector';
-import LoadingOverlay from './LoadingOverlay';
-import { BookUploadFormValues } from 'types';
 import { useAuth } from '@clerk/nextjs';
 import { toast } from 'sonner';
 import { checkBookExists } from '@/lib/actions/book.action';
 import { useRouter } from 'next/navigation';
+
+import FileUploader from './FileUploader';
+import VoiceSelector from './VoiceSelector';
+import LoadingOverlay from './LoadingOverlay';
+import { BookUploadFormValues } from 'types';
+import { parsePDFFile } from '@/lib/utils';
+import { upload } from '@vercel/blob/client';
 
 const UploadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,7 +46,7 @@ const UploadForm = () => {
     },
   });
 
-  const onSubmit = async (values: BookUploadFormValues) => {
+  const onSubmit = async (data: BookUploadFormValues) => {
     if (!userId) {
       toast('You must be logged in to upload a book.');
       return;
@@ -51,13 +54,49 @@ const UploadForm = () => {
 
     setIsSubmitting(true);
     try {
-      const existCheck = await checkBookExists(values.title);
+      const existCheck = await checkBookExists(data.title);
       if (existCheck.exists && existCheck.book) {
         toast.info(
-          `A book with the title "${values.title}" already exists. Please choose a different title or delete the existing book first.`,
+          `A book with the title "${data.title}" already exists. Please choose a different title or delete the existing book first.`,
         );
         form.reset();
         router.push(`/books/${existCheck.book.slug}`);
+        return;
+      }
+
+      const fileTitle = data.title.replace(/\s+/g, '-').toLowerCase();
+      const pdfFile = data.pdfFile[0];
+
+      const parsedPDF = await parsePDFFile(pdfFile);
+
+      if (parsedPDF.content.length === 0) {
+        toast.error(
+          'Failed to parse PDF. Please ensure the file is valid and try again.',
+        );
+        setIsSubmitting(false);
+        return;
+      }
+
+      const uploadedPdfBlob = await upload(fileTitle, pdfFile, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+        contentType: 'application/pdf',
+      });
+
+      let coverUrl: string;
+
+      if (data.coverImage && data.coverImage.length > 0) {
+        const coverFile = data.coverImage[0];
+        const uploadedCoverBlob = await upload(
+          `${fileTitle}_cover.png`,
+          coverFile,
+          {
+            access: 'public',
+            handleUploadUrl: '/api/upload',
+            contentType: coverFile.type,
+          },
+        );
+        coverUrl = uploadedCoverBlob.url;
       }
     } catch (error) {
       console.error('Upload failed:', error);
