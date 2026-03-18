@@ -147,6 +147,9 @@ const UploadForm = () => {
         toast.error('Failed to save book segments. Please try again.');
         throw new Error('Failed to save book segments');
       }
+
+      form.reset();
+      router.push('/');
     } catch (error) {
       console.error('Upload failed:', error);
       toast.error('Upload failed. Please try again.');
