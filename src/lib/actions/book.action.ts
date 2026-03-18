@@ -14,9 +14,9 @@ export const checkBookExists = async (title: string) => {
 
     const existingBook = await Book.findOne({ slug }).lean();
     return { exists: true, book: serializeData(existingBook) };
-  } catch (error) {
-    console.error('Error checking book existence:', error);
-    return { exists: false, error };
+  } catch (e) {
+    console.error('Error checking book existence:', e);
+    return { exists: false, error: e };
   }
 };
 
