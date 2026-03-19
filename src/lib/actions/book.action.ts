@@ -37,7 +37,7 @@ export const createBook = async (data: CreateBook) => {
     }
     const book = new Book({ ...data, slug, totalSegments: 0 });
 
-    return { success: true, data: serializeData(book), alreadyExists: false };
+    return { success: true, data: serializeData(book) };
   } catch (e) {
     console.error('Error creating book:', e);
     return { success: false, error: e };
