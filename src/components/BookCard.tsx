@@ -23,6 +23,7 @@ const BookCard = ({
               width={133}
               height={200}
               className="book-card-cover"
+              style={{ width: 133, height: 200 }}
             />
           </div>
         </figure>
