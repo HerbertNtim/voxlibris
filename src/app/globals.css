@@ -669,6 +669,7 @@
   }
   .book-card-cover {
     @apply w-auto h-42.5 md:h-50 object-cover rounded-lg p-1;
+
     box-shadow: var(--shadow-book);
   }
   .book-card-meta {
