@@ -26,12 +26,12 @@ const BookCard = ({
               style={{ width: 133, height: 200 }}
             />
           </div>
-        </figure>
 
-        <figcaption className="book-card-meta">
-          <h3 className="book-card-title">{title}</h3>
-          <p className="book-card-author">{author}</p>
-        </figcaption>
+          <figcaption className="book-card-meta">
+            <h3 className="book-card-title">{title}</h3>
+            <p className="book-card-author">{author}</p>
+          </figcaption>
+        </figure>
       </article>
     </Link>
   );
