@@ -9,7 +9,6 @@ const Home = async () => {
     bookResults.success && bookResults.data && bookResults.data.length > 0
       ? bookResults.data
       : sampleBooks;
-  console.log('Fetched books:', books);
   return (
     <main className="wrapper container">
       <HeroSection />

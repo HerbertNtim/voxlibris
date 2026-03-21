@@ -34,6 +34,7 @@ export const checkBookExists = async (title: string) => {
 
 export const createBook = async (data: CreateBook) => {
   try {
+    console.log('Creating book with data:', data);
     await connectToDatabase();
 
     const slug = generateSlug(data.title);
@@ -47,7 +48,7 @@ export const createBook = async (data: CreateBook) => {
         alreadyExists: true,
       };
     }
-    const book = new Book({ ...data, slug, totalSegments: 0 });
+    const book = await Book.create({ ...data, slug, totalSegments: 0 });
 
     return { success: true, data: serializeData(book) };
   } catch (e) {
