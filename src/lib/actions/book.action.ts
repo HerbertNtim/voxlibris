@@ -34,7 +34,6 @@ export const checkBookExists = async (title: string) => {
 
 export const createBook = async (data: CreateBook) => {
   try {
-    console.log('Creating book with data:', data);
     await connectToDatabase();
 
     const slug = generateSlug(data.title);
