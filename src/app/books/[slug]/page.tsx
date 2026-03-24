@@ -3,24 +3,23 @@ import { redirect } from 'next/navigation';
 import { getBookBySlug } from '@/lib/actions/book.action';
 import { Mic, MicOff, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
-interface BookPageProps {
-  params: {
-    slug: string;
-  };
-}
-
-const BookPage = async ({ params }: BookPageProps) => {
+const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { userId } = await auth();
 
   if (!userId) {
     redirect('/');
   }
 
-  const { slug } = params;
+  const { slug } = await params;
   const bookResult = await getBookBySlug(slug);
 
   if (!bookResult.success || !bookResult.data) {
+    redirect('/sign-in');
+  }
+
+  if (!bookResult.data || !bookResult.success) {
     redirect('/');
   }
 
@@ -29,9 +28,9 @@ const BookPage = async ({ params }: BookPageProps) => {
   return (
     <div className="book-page-container">
       {/* Floating Back Button */}
-      <button className="back-btn-floating">
+      <Link href="/" className="back-btn-floating">
         <ArrowLeft className="w-5 h-5" />
-      </button>
+      </Link>
 
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header Card */}
