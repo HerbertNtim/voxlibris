@@ -75,6 +75,17 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 </div>
               </div>
             </div>
+
+            {/* wave image */}
+            <div className="hidden md:block ml-12">
+              <Image
+                src={'/book-detail.png'}
+                alt="book detail illustration"
+                width={500}
+                height={500}
+                style={{ width: '100%', height: 'auto' }}
+              />
+            </div>
           </div>
         </div>
 
