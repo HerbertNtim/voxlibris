@@ -42,6 +42,10 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
                 src={book.coverURL}
                 alt={`${book.title} cover`}
                 className="w-30 h-auto rounded-lg shadow-book"
+                width={120}
+                height={180}
+                loading="eager"
+                style={{ width: '100%', height: 'auto' }}
               />
               <button className="vapi-mic-btn absolute -bottom-3 -right-3">
                 <MicOff className="w-6 h-6" />
