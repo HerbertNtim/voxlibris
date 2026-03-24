@@ -29,7 +29,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     <div className="book-page-container">
       {/* Floating Back Button */}
       <Link href="/" className="back-btn-floating">
-        <ArrowLeft className="w-5 h-5" />
+        <ArrowLeft className="size-6 text-[#212a3b]" />
       </Link>
 
       <div className="max-w-4xl mx-auto space-y-8">

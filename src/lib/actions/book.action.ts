@@ -103,8 +103,6 @@ export const getBookBySlug = async (slug: string) => {
     if (!book) {
       return { success: false };
     }
-
-    console.log('Fetched book by slug:', book);
     return { success: true, data: serializeData(book) };
   } catch (e) {
     console.error('Error fetching book by slug:', e);
