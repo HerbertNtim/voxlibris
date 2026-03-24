@@ -30,7 +30,7 @@ const HeroSection = () => {
               alt="hero book illustration"
               width={400}
               height={400}
-              style={{ width: 400, height: 400 }}
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
 
@@ -41,7 +41,7 @@ const HeroSection = () => {
               alt="hero book illustration"
               width={300}
               height={300}
-              style={{ width: 300, height: 300 }}
+              style={{ width: '100%', height: 'auto' }}
             />
           </div>
 
