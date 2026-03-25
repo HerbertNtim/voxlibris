@@ -412,7 +412,7 @@
     @apply absolute inset-0 w-12.5 h-12.5 sm:w-15 sm:h-15 bg-white rounded-full opacity-50 animate-ping;
   }
   .vapi-mic-btn {
-    @apply relative w-12.5 h-12.5 sm:w-15 sm:h-15 cursor-pointer rounded-full flex items-center justify-center transition-all duration-300 border-0 bg-white;
+    @apply w-12.5 h-12.5 sm:w-15 sm:h-15 cursor-pointer rounded-full flex items-center justify-center transition-all duration-300 border-0 bg-white;
 
     &:hover {
       transform: scale(1.05);
