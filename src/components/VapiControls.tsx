@@ -34,8 +34,16 @@ const VapiControls = ({ book }: { book: IBook }) => {
               loading="eager"
               style={{ width: '100%', height: 'auto' }}
             />
-            <button className="vapi-mic-btn absolute -bottom-3 -right-3">
-              <MicOff className="w-6 h-6" />
+            <button
+              className={`vapi-mic-btn absolute -bottom-3 -right-3 ${isActive ? 'vapi-mic-btn-active' : 'vapi-mic-btn-inactive'}`}
+              onClick={isActive ? stop : start}
+              disabled={status === 'connecting' || status === 'starting'}
+            >
+              {isActive ? (
+                <Mic className="size-7 text-[#212a3b]" />
+              ) : (
+                <MicOff className="size-7 text-[#212a3b]" />
+              )}
             </button>
           </div>
 
