@@ -23,7 +23,7 @@ export const useVapi = (book: IBook) => {
   const { userId } = useAuth();
 
   const [status, setStatus] = useState<CallStatus>('idle');
-  const [message, setMessage] = useState<Messages[]>([]);
+  const [messages, setMessages] = useState<Messages[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [currentUserMessage, setCurrentUserMessage] = useState<string>('');
   const [duration, setDuration] = useState(0);
@@ -57,7 +57,7 @@ export const useVapi = (book: IBook) => {
   return {
     status,
     isActive,
-    message,
+    messages,
     currentMessage,
     currentUserMessage,
     duration,
