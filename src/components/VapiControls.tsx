@@ -1,8 +1,23 @@
+'use client';
+
+import useVapi from '@/hooks/useVapi';
 import { Mic, MicOff } from 'lucide-react';
 import Image from 'next/image';
 import { IBook } from 'types';
+import Transcript from './Transcript';
 
 const VapiControls = ({ book }: { book: IBook }) => {
+  const {
+    status,
+    isActive,
+    messages,
+    currentMessage,
+    currentUserMessage,
+    duration,
+    start,
+    stop,
+  } = useVapi(book);
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header Card */}
@@ -60,13 +75,13 @@ const VapiControls = ({ book }: { book: IBook }) => {
           </div>
         </div>
       </div>
-      <div className="transcript-container">
-        <div className="transcript-empty">
-          <Mic className="w-12 h-12 text-text-muted mb-4" />
-          <p className="transcript-empty-text">No conversation yet</p>
-          <p className="transcript-empty-hint">
-            Click the mic button above to start talking
-          </p>
+      <div className="vapi-transcript-wrapper">
+        <div className="transcript-container">
+          <Transcript
+            messages={messages}
+            currentMessage={currentMessage}
+            currentUserMessage={currentUserMessage}
+          />
         </div>
       </div>
     </div>
