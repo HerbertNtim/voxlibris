@@ -16,6 +16,7 @@ const VapiControls = ({ book }: { book: IBook }) => {
     duration,
     start,
     stop,
+    clearErrors,
   } = useVapi(book);
 
   return (
