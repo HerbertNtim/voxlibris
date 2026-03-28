@@ -1,5 +1,6 @@
 import { DEFAULT_VOICE } from '@/lib/constants';
 import { useAuth } from '@clerk/nextjs';
+import { set } from 'mongoose';
 import { useEffect, useRef, useState } from 'react';
 import { IBook, Messages } from 'types';
 
@@ -50,7 +51,22 @@ export const useVapi = (book: IBook) => {
   // const remainingSeconds
   // const showTimeWarning
 
-  const start = async () => {};
+  const start = async () => {
+    if (!userId) {
+      setLimitError('You must be signed in to use this feature.');
+      return;
+    }
+
+    setLimitError(null);
+    setStatus('connecting');
+
+    try {
+    } catch (e) {
+      console.error('Error Starting  call: ', e);
+      setStatus('idle');
+      setLimitError('Failed to start voice session. Please try again.');
+    }
+  };
   const stop = async () => {};
   const clearErrors = async () => {};
 

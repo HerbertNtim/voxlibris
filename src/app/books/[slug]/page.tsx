@@ -1,6 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
-import { getBookBySlug } from '@/lib/actions/book.action';
+import { getBookBySlug } from '@/lib/actions/book.actions';
 import Link from 'next/link';
 import VapiControls from '@/components/VapiControls';
 import { ArrowLeft } from 'lucide-react';
