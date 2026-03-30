@@ -2,7 +2,10 @@
 
 // Create hooks/useVapi.ts: the core hook. Initializes Vapi SDK, manages call lifecycle (idle, connecting, starting, listening, thinking, speaking), tracks messages array + currentMessage streaming, handles duration timer with maxDuration enforcement, session tracking via server actions
 
-import { startVoiceSession } from '@/lib/actions/session.actions';
+import {
+  endVoiceSession,
+  startVoiceSession,
+} from '@/lib/actions/session.actions';
 import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
 import { getVoice } from '@/lib/utils';
 import { useAuth } from '@clerk/nextjs';
@@ -28,6 +31,9 @@ const useLatestRef = <T>(value: T) => {
 };
 
 const VAPI_API_KEY = process.env.NEXT_PUBLIC_VAPI_API_KEY;
+const TIMER_INTERVAL_MS = 1000; // Update duration every second
+const SECONDS_PER_MINUTE = 60;
+const TIME_WARNING_THRESHOLD = 60;
 
 let vapi: InstanceType<typeof Vapi>;
 
@@ -53,10 +59,12 @@ export const useVapi = (book: IBook) => {
   const [limitError, setLimitError] = useState<string | null>(null);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const startTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const startTimeRef = useRef<number | null>(null);
   const sessionIdRef = useRef<string | null>(null);
   const isStoppingRef = useRef<boolean>(false);
 
+  // Keep refs in sync with latest values for use in callbacks
+  // const maxDurationRef = useLatestRef(limits.maxSessionMinutes * 60);
   const bookRef = useLatestRef(book);
   const durationRef = useLatestRef(duration);
   const voice = book.persona || DEFAULT_VOICE;
@@ -66,6 +74,117 @@ export const useVapi = (book: IBook) => {
     status === 'thinking' ||
     status === 'speaking' ||
     status === 'starting';
+
+  // Set up Vapi event listeners
+  useEffect(() => {
+    const handlers = {
+      'call-start': () => {
+        isStoppingRef.current = false;
+        setStatus('starting'); // AI speaks first, wait for it
+        setCurrentMessage('');
+        setCurrentUserMessage('');
+
+        // Start duration timer
+        startTimeRef.current = Date.now();
+        setDuration(0);
+        timerRef.current = setInterval(() => {
+          if (startTimeRef.current) {
+            const newDuration = Math.floor(
+              (Date.now() - startTimeRef.current) / TIMER_INTERVAL_MS,
+            );
+            setDuration(newDuration);
+          }
+        }, TIMER_INTERVAL_MS);
+      },
+
+      'call-end': () => {
+        // Don't reset isStoppingRef here - delayed events may still fire
+        setStatus('idle');
+        setCurrentMessage('');
+        setCurrentUserMessage('');
+
+        // Stop timer
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+
+        // End session tracking
+        if (sessionIdRef.current) {
+          endVoiceSession(sessionIdRef.current, durationRef.current).catch(
+            (e) => {
+              console.error('Error ending voice session: ', e);
+            },
+          );
+
+          sessionIdRef.current = null;
+        }
+
+        startTimeRef.current = null;
+      },
+
+      'speech-start': () => {
+        if (!isStoppingRef.current) {
+          setStatus('speaking');
+        }
+      },
+
+      'speech-end': () => {
+        if (!isStoppingRef.current) {
+          setStatus('listening');
+        }
+      },
+
+      message: (message: {
+        type: string;
+        role: string;
+        transcriptType: string;
+        transcript: string;
+      }) => {
+        if (message.type !== 'transcript') return;
+
+        // User finished speaking -> AI is thinking
+        if (message.role === 'user' && message.transcriptType === 'final') {
+          if (!isStoppingRef.current) {
+            setStatus('thinking');
+          }
+          setCurrentUserMessage('');
+        }
+
+        // Partial user transcript → show real-time typing
+        if (message.role === 'user' && message.transcriptType === 'partial') {
+          setCurrentUserMessage(message.transcript);
+          return;
+        }
+
+        // Partial AI transcript → show word-by-word
+        if (
+          message.role === 'assistant' &&
+          message.transcriptType === 'partial'
+        ) {
+          setCurrentMessage(message.transcript);
+          return;
+        }
+
+        // Final transcript → add to messages
+        if (message.transcriptType === 'final') {
+          if (message.role === 'assistant') setCurrentMessage('');
+          if (message.role === 'user') setCurrentUserMessage('');
+
+          setMessages((prev) => {
+            const isDupe = prev.some(
+              (m) =>
+                m.role === message.role && m.content === message.transcript,
+            );
+
+            return isDupe
+              ? prev
+              : [...prev, { role: message.role, content: message.transcript }];
+          });
+        }
+      },
+    };
+  }, []);
 
   // Limits
   // const maxDurationRef = useLatestRef(limit.maxSessionMinutes * 60); // 5 minutes max per session
