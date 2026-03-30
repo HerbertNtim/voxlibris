@@ -31,7 +31,7 @@ const Transcript = ({
   }, [messages, currentMessage, currentUserMessage]);
 
   const isEmpty =
-    messages && messages.length === 0 && !currentMessage && !currentUserMessage;
+    messages.length === 0 && !currentMessage && !currentUserMessage;
 
   if (isEmpty) {
     return (

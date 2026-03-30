@@ -1,7 +1,7 @@
 'use server';
 
 import { connectToDatabase } from '@/database/mongoose';
-import { StartSessionResult } from 'types';
+import { EndSessionResult, StartSessionResult } from 'types';
 import { getCurrentBillingPeriodStart } from '../subscription-constants';
 import VoiceSession from '@/database/models/voice-session.model';
 
@@ -29,6 +29,37 @@ export const startVoiceSession = async (
     return {
       success: false,
       error: 'Failed to start voice session. Please try again.',
+    };
+  }
+};
+
+export const endVoiceSession = async (
+  sessionId: string,
+  durationSeconds: number,
+): Promise<EndSessionResult> => {
+  try {
+    await connectToDatabase();
+
+    const session = await VoiceSession.findByIdAndUpdate(sessionId, {
+      endAt: new Date(),
+      durationSeconds,
+    });
+
+    if (!session) {
+      return {
+        success: false,
+        error: 'Voice session not found.',
+      };
+    }
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    console.error('Error ending voice session: ', e);
+    return {
+      success: false,
+      error: 'Failed to end voice session. Please try again.',
     };
   }
 };
