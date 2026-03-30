@@ -1,5 +1,8 @@
-import { DEFAULT_VOICE } from '@/lib/constants';
+import { startVoiceSession } from '@/lib/actions/session.actions';
+import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
+import { getVoice } from '@/lib/utils';
 import { useAuth } from '@clerk/nextjs';
+import Vapi from '@vapi-ai/web';
 import { set } from 'mongoose';
 import { useEffect, useRef, useState } from 'react';
 import { IBook, Messages } from 'types';
@@ -19,6 +22,21 @@ const useLatestRef = <T>(value: T) => {
   }, [value]);
   return ref;
 };
+
+const VAPI_API_KEY = process.env.NEXT_PUBLIC_VAPI_API_KEY;
+
+let vapi: InstanceType<typeof Vapi>;
+
+function getVapi() {
+  if (!vapi) {
+    if (!VAPI_API_KEY) {
+      throw new Error('VAPI API key is not set');
+    }
+    vapi = new Vapi(VAPI_API_KEY);
+  }
+
+  return vapi;
+}
 
 export const useVapi = (book: IBook) => {
   const { userId } = useAuth();
@@ -61,6 +79,37 @@ export const useVapi = (book: IBook) => {
     setStatus('connecting');
 
     try {
+      const response = await startVoiceSession(userId, book._id);
+
+      if (!response.success) {
+        setLimitError(
+          response.error || 'Failed to start voice session. Please try again.',
+        );
+        setStatus('idle');
+        return;
+      }
+
+      sessionIdRef.current = response.sessionId || null;
+
+      const firstMessage = `You are now reading "${bookRef.current.title}" by ${bookRef.current.author}. The voice you will be listening to is ${voice}. Say "stop" at any time to end the session.`;
+
+      await getVapi().start(ASSISTANT_ID, {
+        firstMessage,
+        variableValues: {
+          title: book.title,
+          author: book.author,
+          bookId: book._id,
+        },
+        voice: {
+          provider: '11labs' as const,
+          voiceId: getVoice(voice).id,
+          model: 'eleven_turbo_v2_5' as const,
+          stability: VOICE_SETTINGS.stability,
+          similarityBoost: VOICE_SETTINGS.similarityBoost,
+          style: VOICE_SETTINGS.style,
+          useSpeakerBoost: VOICE_SETTINGS.useSpeakerBoost,
+        },
+      });
     } catch (e) {
       console.error('Error Starting  call: ', e);
       setStatus('idle');
