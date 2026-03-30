@@ -116,7 +116,10 @@ export const useVapi = (book: IBook) => {
       setLimitError('Failed to start voice session. Please try again.');
     }
   };
-  const stop = async () => {};
+  const stop = async () => {
+    isStoppingRef.current = true;
+    await getVapi().stop();
+  };
   const clearErrors = async () => {};
 
   return {
