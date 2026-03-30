@@ -10,7 +10,6 @@ import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
 import { getVoice } from '@/lib/utils';
 import { useAuth } from '@clerk/nextjs';
 import Vapi from '@vapi-ai/web';
-import { set } from 'mongoose';
 import { useEffect, useRef, useState } from 'react';
 import { IBook, Messages } from 'types';
 
