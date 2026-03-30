@@ -275,6 +275,7 @@ export const useVapi = (book: IBook) => {
     setStatus('connecting');
 
     try {
+      // Check session limits and create session record
       const response = await startVoiceSession(userId, book._id);
 
       if (!response.success) {
@@ -286,6 +287,8 @@ export const useVapi = (book: IBook) => {
       }
 
       sessionIdRef.current = response.sessionId || null;
+      // Note: Server returned maxDurationMinutes is informational only
+      // The actual limit is enforced by useLatestRef (limits.maxSessionMinutes * 60)
 
       const firstMessage = `You are now reading "${bookRef.current.title}" by ${bookRef.current.author}. The voice you will be listening to is ${voice}. Say "stop" at any time to end the session.`;
 
