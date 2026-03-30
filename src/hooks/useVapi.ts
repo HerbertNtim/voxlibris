@@ -183,8 +183,81 @@ export const useVapi = (book: IBook) => {
           });
         }
       },
+
+      error: (error: Error) => {
+        console.error('Vapi error: ', error);
+        // Don't reset isStoppingRef here - delayed events may still fire
+        setStatus('idle');
+        setCurrentMessage('');
+        setCurrentUserMessage('');
+
+        // Stop timer on Error
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
+          timerRef.current = null;
+        }
+
+        // End session tracking on Error
+        if (sessionIdRef.current) {
+          endVoiceSession(sessionIdRef.current, durationRef.current).catch(
+            (e) => {
+              console.error('Error ending voice session: ', e);
+            },
+          );
+
+          sessionIdRef.current = null;
+        }
+
+        // Show user-friendly error message
+        const errorMessage = error.message?.toLowerCase() || '';
+        if (
+          errorMessage.includes('timeout') ||
+          errorMessage.includes('silence')
+        ) {
+          setLimitError('The voice session has ended due to inactivity.');
+        } else if (
+          errorMessage.includes('network') ||
+          errorMessage.includes('connection')
+        ) {
+          setLimitError(
+            'A network error occurred. Please check your connection and try again.',
+          );
+        } else {
+          setLimitError(
+            'An error occurred during the voice session. Please try again.',
+          );
+        }
+
+        startTimeRef.current = null;
+      },
     };
-  }, []);
+
+    // Register all handlers
+    Object.entries(handlers).forEach(([event, handler]) => {
+      getVapi().on(event as keyof typeof handlers, handler as () => void);
+    });
+
+    return () => {
+      // End active session on unmount
+      if (sessionIdRef.current) {
+        getVapi().stop();
+        endVoiceSession(sessionIdRef.current, durationRef.current).catch(
+          (e) => {
+            console.error('Error ending voice session: ', e);
+          },
+        );
+        sessionIdRef.current = null;
+      }
+
+      // Clean up handlers
+      Object.entries(handlers).forEach(([event, handler]) => {
+        getVapi().off(event as keyof typeof handlers, handler as () => void);
+      });
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [durationRef]);
 
   // Limits
   // const maxDurationRef = useLatestRef(limit.maxSessionMinutes * 60); // 5 minutes max per session
