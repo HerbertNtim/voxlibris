@@ -289,7 +289,7 @@ export const useVapi = (book: IBook) => {
       // Note: Server returned maxDurationMinutes is informational only
       // The actual limit is enforced by useLatestRef (limits.maxSessionMinutes * 60)
 
-      const firstMessage = `You are now reading "${bookRef.current.title}" by ${bookRef.current.author}. The voice you will be listening to is ${voice}. Say "stop" at any time to end the session.`;
+      const firstMessage = `You are now reading "${bookRef.current.title}" by ${bookRef.current.author}. The voice you will be listening to is ${voice}. How can I help you engage with the book?`;
 
       await getVapi().start(ASSISTANT_ID, {
         firstMessage,
