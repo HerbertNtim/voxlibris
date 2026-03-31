@@ -22,7 +22,7 @@ import {
   checkBookExists,
   createBook,
   saveBookSegments,
-} from '@/lib/actions/book.action';
+} from '@/lib/actions/book.actions';
 import { useRouter } from 'next/navigation';
 
 import FileUploader from './FileUploader';
