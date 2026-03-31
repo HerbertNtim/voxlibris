@@ -326,6 +326,7 @@ export const useVapi = (book: IBook) => {
     messages,
     currentMessage,
     currentUserMessage,
+    limitError,
     duration,
     start,
     stop,
