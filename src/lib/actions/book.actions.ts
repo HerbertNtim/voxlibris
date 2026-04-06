@@ -48,6 +48,35 @@ export const createBook = async (data: CreateBook) => {
         alreadyExists: true,
       };
     }
+
+    // Check subscription limits before creating a book
+    const { getUserPlan } = await import('@/lib/subscription.server');
+    const { PLAN_LIMITS } = await import('@/lib/subscription-constants');
+
+    const { auth } = await import('@clerk/nextjs/server');
+    const { userId } = await auth();
+
+    if (!userId || userId !== data.clerkId) {
+      return {
+        success: false,
+        error: 'Unauthorized: User ID mismatch',
+      };
+    }
+
+    const plan = await getUserPlan();
+    const limits = PLAN_LIMITS[plan];
+
+    const bookCount = await Book.countDocuments({ clerkId: userId });
+
+    if (bookCount >= limits.maxBooks) {
+      const { revalidatePath } = await import('next/cache');
+      revalidatePath('/');
+      return {
+        success: false,
+        error: `Plan limit reached: You can only create up to ${limits.maxBooks} books on the ${plan} plan.`,
+      };
+    }
+
     const book = await Book.create({ ...data, slug, totalSegments: 0 });
 
     return { success: true, data: serializeData(book) };
