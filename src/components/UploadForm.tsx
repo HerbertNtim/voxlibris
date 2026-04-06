@@ -123,7 +123,12 @@ const UploadForm = () => {
       });
 
       if (!book.success) {
-        toast.error('Failed to create book record. Please try again.');
+        if (book.isBillingError) {
+          router.push('/subscriptions');
+        }
+        toast.error(
+          `${book.error} || 'Failed to create book record. Please try again.'`,
+        );
         setIsSubmitting(false);
         return;
       }

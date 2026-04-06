@@ -74,6 +74,7 @@ export const createBook = async (data: CreateBook) => {
       return {
         success: false,
         error: `Plan limit reached: You can only create up to ${limits.maxBooks} books on the ${plan} plan.`,
+        isBillingError: true,
       };
     }
 
