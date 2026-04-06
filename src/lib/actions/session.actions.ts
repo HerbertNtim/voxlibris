@@ -12,6 +12,30 @@ export const startVoiceSession = async (
   try {
     await connectToDatabase();
 
+    // Limits/Plan to see whether a session is allowed
+    const { getUserPlan } = await import('@/lib/subscription.server');
+    const { PLAN_LIMITS, getCurrentBillingPeriodStart } =
+      await import('@/lib/subscription-constants');
+
+    const plan = await getUserPlan();
+    const limits = PLAN_LIMITS[plan];
+    const billingPeriodStart = getCurrentBillingPeriodStart();
+
+    const sessionCount = await VoiceSession.countDocuments({
+      clerkId,
+      billingPeriodStart,
+    });
+
+    if (sessionCount >= limits.maxSessionsPerMonth) {
+      const { revalidatePath } = await import('next/cache');
+      revalidatePath('/');
+      return {
+        success: false,
+        error: `Plan limit reached: You can only have up to ${limits.maxSessionsPerMonth} voice sessions per month on the ${plan} plan.`,
+        isBillingError: true,
+      };
+    }
+
     const session = await VoiceSession.create({
       clerkId,
       bookId,
@@ -23,6 +47,7 @@ export const startVoiceSession = async (
     return {
       success: true,
       sessionId: session._id.toString(),
+      maxDurationMinutes: limits.maxDurationPerSession,
     };
   } catch (e) {
     console.error('Error starting voice session: ', e);
