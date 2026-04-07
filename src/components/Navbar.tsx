@@ -55,7 +55,7 @@ const Navbar = () => {
             </Show>
             <Show when="signed-in">
               <div className="nav-user-link">
-                <UserButton />
+                <UserButton userProfileMode="modal" />
                 {user?.firstName && (
                   <span className="nav-user-name">{user.firstName}</span>
                 )}
