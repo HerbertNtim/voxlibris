@@ -330,7 +330,7 @@
     @apply flex items-center gap-1 hover:opacity-70 transition-opacity;
   }
   .nav-user-name {
-    @apply hidden sm:inline text-base font-medium text-black;
+    @apply hidden sm:inline text-base font-medium text-black cursor-text ml-1;
   }
 
   /* ===========================================
