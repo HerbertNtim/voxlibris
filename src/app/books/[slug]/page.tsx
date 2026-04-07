@@ -16,7 +16,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const bookResult = await getBookBySlug(slug);
 
   if (!bookResult.success || !bookResult.data) {
-    redirect('/sign-in');
+    redirect('/');
   }
 
   if (!bookResult.data || !bookResult.success) {
