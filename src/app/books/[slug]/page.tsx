@@ -19,10 +19,6 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     redirect('/');
   }
 
-  if (!bookResult.data || !bookResult.success) {
-    redirect('/');
-  }
-
   const book = bookResult.data;
 
   return (
