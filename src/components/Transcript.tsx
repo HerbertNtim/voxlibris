@@ -61,6 +61,9 @@ const Transcript = ({
               : 'transcript-message-assistant'
           }`}
         >
+          <div className="text-[11px] uppercase tracking-[0.08em] text-[#555] mb-1">
+            {message.role === 'user' ? 'You' : 'Assistant'}
+          </div>
           <div
             className={`transcript-bubble ${
               message.role === 'user'
@@ -76,6 +79,9 @@ const Transcript = ({
       {/* User Streaming Message */}
       {currentUserMessage && (
         <div className="transcript-message transcript-message-user">
+          <div className="text-[11px] uppercase tracking-[0.08em] text-[#555] mb-1">
+            You
+          </div>
           <div className="transcript-bubble transcript-bubble-user">
             {currentUserMessage}
             <span className="transcript-cursor" />
@@ -86,6 +92,9 @@ const Transcript = ({
       {/* Assistant Streaming Message */}
       {currentMessage && (
         <div className="transcript-message transcript-message-assistant">
+          <div className="text-[11px] uppercase tracking-[0.08em] text-[#555] mb-1">
+            Assistant
+          </div>
           <div className="transcript-bubble transcript-bubble-assistant">
             {currentMessage}
             <span className="transcript-cursor" />

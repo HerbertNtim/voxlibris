@@ -68,11 +68,7 @@ export const useVapi = (book: IBook) => {
   const durationRef = useLatestRef(duration);
   const voice = book.persona || DEFAULT_VOICE;
 
-  const isActive =
-    status === 'listening' ||
-    status === 'thinking' ||
-    status === 'speaking' ||
-    status === 'starting';
+  const isActive = status !== 'idle';
 
   // Set up Vapi event listeners
   useEffect(() => {
