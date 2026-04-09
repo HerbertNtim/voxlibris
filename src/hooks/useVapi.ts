@@ -30,7 +30,8 @@ const TIMER_INTERVAL_MS = 1000;
 const SECONDS_PER_MINUTE = 60;
 const TIME_WARNING_THRESHOLD = 60; // Show warning when this many seconds remain
 
-let vapi: InstanceType<typeof Vapi>;
+let vapi: Vapi | null = null;
+
 function getVapi() {
   if (!vapi) {
     if (!VAPI_API_KEY) {
@@ -289,6 +290,12 @@ export function useVapi(book: IBook) {
       // Note: Server-returned maxDurationMinutes is informational only
       // The actual limit is enforced by useLatestRef(limits.maxSessionMinutes * 60)
 
+      if (!ASSISTANT_ID) {
+        setLimitError('Assistant ID not configured.');
+        setStatus('idle');
+        return;
+      }
+
       const firstMessage = `Hey, good to meet you. Quick question before we dive in - have you actually read ${book.title} yet, or are we starting fresh?`;
 
       await getVapi().start(ASSISTANT_ID, {
@@ -331,12 +338,6 @@ export function useVapi(book: IBook) {
     status === 'thinking' ||
     status === 'speaking';
 
-  // Calculate remaining time
-  // const maxDurationSeconds = limits.maxSessionMinutes * SECONDS_PER_MINUTE;
-  // const remainingSeconds = Math.max(0, maxDurationSeconds - duration);
-  // const showTimeWarning =
-  //     isActive && remainingSeconds <= TIME_WARNING_THRESHOLD && remainingSeconds > 0;
-
   return {
     status,
     isActive,
@@ -350,9 +351,6 @@ export function useVapi(book: IBook) {
     isBillingError,
     maxDurationSeconds,
     clearError,
-    // maxDurationSeconds,
-    // remainingSeconds,
-    // showTimeWarning,
   };
 }
 
